@@ -13,6 +13,15 @@ react-datasheet-grid now supports React 19 while maintaining backward compatibil
   }
   ```
 
+- **Core Dependencies**: Updated to React 19 compatible versions
+  - `react-resize-detector`: Updated from `^7.1.2` to `^12.0.2`
+  - `@tanstack/react-virtual`: Updated from `^3.0.0-beta.18` to `^3.13.10`
+
+- **Development Dependencies**: Updated for React 19 support
+  - `@testing-library/react`: Updated from `^13.4.0` to `^16.1.0`
+  - `@types/react`: Updated to `^19.0.0`
+  - `react` and `react-dom`: Updated to `^19.0.0` for development
+
 ### 2. Component Updates
 - **DataSheetGrid.tsx**: Maintained forwardRef for backward compatibility
 - **StaticDataSheetGrid.tsx**: Maintained forwardRef for backward compatibility

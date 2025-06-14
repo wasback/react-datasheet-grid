@@ -1,5 +1,11 @@
 # Change Log
 
+## 4.12.0
+> Date: 2025-06-15
+### Added
+- Support for React 19
+- Updated dependencies
+
 ## 4.11.5
 > Date: 2024-11-27
 ### Fix
