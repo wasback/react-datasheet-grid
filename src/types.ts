@@ -93,7 +93,7 @@ export type AddRowsComponentProps = {
 
 export type ContextMenuItem =
   | {
-      type: 'INSERT_ROW_BELLOW' | 'DELETE_ROW' | 'DUPLICATE_ROW' | 'COPY' | 'CUT' | 'PASTE'
+      type: 'INSERT_ROW_BELLOW' | 'DELETE_ROW' | 'DUPLICATE_ROW' | 'COPY' | 'CUT' | 'PASTE' | 'COPY_WITH_HEADERS'
       action: () => void
     }
   | {

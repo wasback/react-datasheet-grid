@@ -12,6 +12,10 @@ export const defaultRenderItem = (item: ContextMenuItem) => {
     return <>Copy</>
   }
 
+  if (item.type === 'COPY_WITH_HEADERS') {
+    return <>Copy with headers</>
+  }
+
   if (item.type === 'PASTE') {
     return <>Paste</>
   }

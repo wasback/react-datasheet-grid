@@ -685,6 +685,104 @@ export const DataSheetGrid = React.memo(
       )
       useDocumentEventListener('copy', onCopy)
 
+      const onCopyWithHeaders = useCallback(
+        async () => {
+          if (!editing && activeCell) {
+            const copyData: Array<Array<number | string | null>> = []
+            const headerData: Array<string | null> = []
+
+            const min: Cell = selection?.min || activeCell
+            const max: Cell = selection?.max || activeCell
+
+            // Extract headers for selected columns
+            for (let col = min.col; col <= max.col; ++col) {
+              const columnTitle = columns[col + 1]?.title
+              let headerText: string
+              
+              if (typeof columnTitle === 'string') {
+                headerText = columnTitle
+              } else if (typeof columnTitle === 'number') {
+                headerText = String(columnTitle)
+              } else if (columnTitle && typeof columnTitle === 'object') {
+                // For React elements, try to extract text content
+                try {
+                  headerText = String(columnTitle)
+                } catch {
+                  headerText = `Column ${col + 1}`
+                }
+              } else {
+                headerText = `Column ${col + 1}`
+              }
+              
+              headerData.push(headerText)
+            }
+
+            // Add header row to copy data
+            copyData.push(headerData)
+
+            // Extract data for selected cells
+            for (let row = min.row; row <= max.row; ++row) {
+              copyData.push([])
+
+              for (let col = min.col; col <= max.col; ++col) {
+                const { copyValue = () => null } = columns[col + 1]
+                copyData[row - min.row + 1].push(
+                  copyValue({ rowData: data[row], rowIndex: row })
+                )
+              }
+            }
+
+            const textPlain = copyData.map((row) => row.join('\t')).join('\n')
+            const textHtml = `<table>${copyData
+              .map(
+                (row, index) =>
+                  `<tr>${row
+                    .map(
+                      (cell) =>
+                        `<t${index === 0 ? 'h' : 'd'}>${encodeHtml(String(cell ?? '')).replace(
+                          /\n/g,
+                          '<br/>'
+                        )}</t${index === 0 ? 'h' : 'd'}>`
+                    )
+                    .join('')}</tr>`
+              )
+              .join('')}</table>`
+
+            let success = false
+            if (navigator.clipboard.write !== undefined) {
+              const textBlob = new Blob([textPlain], {
+                type: 'text/plain',
+              })
+              const htmlBlob = new Blob([textHtml], { type: 'text/html' })
+              const clipboardData = [
+                new ClipboardItem({
+                  'text/plain': textBlob,
+                  'text/html': htmlBlob,
+                }),
+              ]
+              await navigator.clipboard.write(clipboardData).then(() => {
+                success = true
+              })
+            } else if (navigator.clipboard.writeText !== undefined) {
+              await navigator.clipboard.writeText(textPlain).then(() => {
+                success = true
+              })
+            } else if (document.execCommand !== undefined) {
+              const result = document.execCommand('copy')
+              if (result) {
+                success = true
+              }
+            }
+            if (!success) {
+              alert(
+                'This action is unavailable in your browser, but you can still use Ctrl+C for copy or Ctrl+X for cut'
+              )
+            }
+          }
+        },
+        [activeCell, columns, data, editing, selection]
+      )
+
       const onCut = useCallback(
         (event?: ClipboardEvent) => {
           if (!editing && activeCell) {
@@ -1554,6 +1652,13 @@ export const DataSheetGrid = React.memo(
             },
           },
           {
+            type: 'COPY_WITH_HEADERS',
+            action: (): void => {
+              onCopyWithHeaders()
+              setContextMenu(null)
+            },
+          },
+          {
             type: 'CUT',
             action: (): void => {
               onCut()
@@ -1669,6 +1774,7 @@ export const DataSheetGrid = React.memo(
       insertRowAfter,
       onCut,
       onCopy,
+      onCopyWithHeaders,
       applyPasteDataToDatasheet,
     ])
 

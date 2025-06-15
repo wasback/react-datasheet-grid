@@ -1,5 +1,15 @@
 # Change Log
 
+## 4.12.2
+> Date: 2025-06-15
+### Added
+- "Copy with headers" option in context menu, which copies selected cells along with names of columns
+
+## 4.12.1
+> Date: 2025-06-15
+### Added
+- Dark mode styling in `style-dark.css`
+
 ## 4.12.0
 > Date: 2025-06-15
 ### Added
