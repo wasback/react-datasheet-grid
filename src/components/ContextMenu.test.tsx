@@ -56,6 +56,10 @@ test('Check all items', () => {
       clientX={0}
       clientY={0}
       items={[
+        { type: 'COPY', action: () => null },
+        { type: 'COPY_WITH_HEADERS', action: () => null },
+        { type: 'CUT', action: () => null },
+        { type: 'PASTE', action: () => null },
         { type: 'INSERT_ROW_BELLOW', action: () => null },
         { type: 'DELETE_ROW', action: () => null },
         { type: 'DUPLICATE_ROW', action: () => null },
@@ -65,6 +69,10 @@ test('Check all items', () => {
       close={() => null}
     />
   )
+  expect(screen.getByText('Copy')).toBeInTheDocument()
+  expect(screen.getByText('Copy with headers')).toBeInTheDocument()
+  expect(screen.getByText('Cut')).toBeInTheDocument()
+  expect(screen.getByText('Paste')).toBeInTheDocument()
   expect(screen.getByText('Insert row below')).toBeInTheDocument()
   expect(screen.getByText('Delete row')).toBeInTheDocument()
   expect(screen.getByText('Duplicate row')).toBeInTheDocument()

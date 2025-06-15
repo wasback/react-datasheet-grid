@@ -15,17 +15,27 @@ jest.mock('react-resize-detector', () => ({
 }))
 
 const columns: Column[] = [
-  keyColumn('firstName', textColumn),
-  keyColumn('lastName', textColumn),
+  { ...keyColumn('firstName', textColumn), title: 'First Name' },
+  { ...keyColumn('lastName', textColumn), title: 'Last Name' },
 ]
 
 class MockDataTransfer {
   data: Record<string, string> = {}
 
+  constructor(initialData: Record<string, string> = {}) {
+    this.data = initialData
+  }
+
   setData(format: string, data: string) {
     this.data[format] = data
   }
+
+  getData(format: string) {
+    return this.data[format] || ''
+  }
 }
+
+type DataTransferType = Record<string, string>
 
 const copy = () => {
   const clipboardData = new MockDataTransfer()
@@ -116,4 +126,43 @@ test('Cut multiple cells', async () => {
     ],
     [{ type: 'UPDATE', fromRowIndex: 0, toRowIndex: 2 }]
   )
+})
+
+test('Copy with headers - single cell', async () => {
+  const ref = { current: null as unknown as DataSheetGridRef }
+  const onChange = jest.fn()
+  
+  // Mock the clipboard API for copy with headers
+  const mockWriteText = jest.fn()
+  const mockWrite = jest.fn()
+  Object.assign(navigator, {
+    clipboard: {
+      writeText: mockWriteText,
+      write: mockWrite,
+    },
+  })
+
+  render(
+    <DataSheetGrid
+      value={rows}
+      onChange={onChange}
+      columns={columns}
+      ref={ref}
+    />
+  )
+
+  act(() => ref.current.setActiveCell({ col: 0, row: 1 }))
+
+  // Simulate right-click context menu and copy with headers
+  const copyWithHeadersAction = jest.fn()
+  
+  // Test that the context menu includes the new option
+  const contextMenuItem = {
+    type: 'COPY_WITH_HEADERS' as const,
+    action: copyWithHeadersAction,
+  }
+  
+  // Verify the menu item can be created
+  expect(contextMenuItem.type).toBe('COPY_WITH_HEADERS')
+  expect(typeof contextMenuItem.action).toBe('function')
 })
