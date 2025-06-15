@@ -39,8 +39,8 @@ export const Grid = <T extends any>({
 }: {
   data: T[]
   columns: Column<T, any, any>[]
-  outerRef: RefObject<HTMLDivElement>
-  innerRef: RefObject<HTMLDivElement>
+  outerRef: RefObject<HTMLDivElement | null>
+  innerRef: RefObject<HTMLDivElement | null>
   columnWidths?: number[]
   hasStickyRightColumn: boolean
   displayHeight: number

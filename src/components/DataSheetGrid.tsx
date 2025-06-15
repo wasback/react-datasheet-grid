@@ -7,9 +7,11 @@ import React, {
   useState,
 } from 'react'
 import {
+  AddRowsComponentProps,
   Cell,
   Column,
   ContextMenuItem,
+  ContextMenuComponentProps,
   DataSheetGridProps,
   DataSheetGridRef,
   Operation,
@@ -72,14 +74,14 @@ export const DataSheetGrid = React.memo(
         gutterColumn,
         stickyRightColumn,
         rowKey,
-        addRowsComponent: AddRowsComponent = AddRows,
+        addRowsComponent: AddRowsComponent = AddRows as (props: AddRowsComponentProps) => React.ReactElement | null,
         createRow = DEFAULT_CREATE_ROW as () => T,
         autoAddRow = false,
         lockRows = false,
         disableExpandSelection = false,
         disableSmartDelete = false,
         duplicateRow = DEFAULT_DUPLICATE_ROW,
-        contextMenuComponent: ContextMenuComponent = ContextMenu,
+        contextMenuComponent: ContextMenuComponent = ContextMenu as (props: ContextMenuComponentProps) => React.ReactElement | null,
         disableContextMenu: disableContextMenuRaw = false,
         onFocus = DEFAULT_EMPTY_CALLBACK,
         onBlur = DEFAULT_EMPTY_CALLBACK,
@@ -90,7 +92,7 @@ export const DataSheetGrid = React.memo(
         onScroll,
       }: DataSheetGridProps<T>,
       ref: React.ForwardedRef<DataSheetGridRef>
-    ): JSX.Element => {
+    ): React.ReactElement => {
       const lastEditingCellRef = useRef<Cell | null>(null)
       const disableContextMenu = disableContextMenuRaw || lockRows
       const columns = useColumns(rawColumns, gutterColumn, stickyRightColumn)
@@ -1852,7 +1854,7 @@ export const DataSheetGrid = React.memo(
   )
 ) as <T extends any>(
   props: DataSheetGridProps<T> & { ref?: React.ForwardedRef<DataSheetGridRef> }
-) => JSX.Element
+) => React.ReactElement
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
