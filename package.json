@@ -25,11 +25,11 @@
     "notion",
     "table"
   ],
-  "author": "Nicolas Keller (https://github.com/nick-keller)",
+  "author": "Nicolas Keller (https://github.com/nick-keller), fork by Sebastian Dziadkowiec (https://github.com/sdziadkowiec)",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sdziadkowiec/react-vibe-datasheet-grid.git"
+    "url": "https://github.com/sdziadkowiec/react-datasheet-grid.git"
   },
   "homepage": "https://react-datasheet-grid.netlify.app/",
   "devDependencies": {
