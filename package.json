@@ -1,6 +1,6 @@
 {
   "name": "@sdziadkowiec/react-datasheet-grid",
-  "version": "4.12.2",
+  "version": "4.12.3",
   "description": "An Excel-like React component to create beautiful spreadsheets.",
   "publishConfig": {
     "access": "public"
