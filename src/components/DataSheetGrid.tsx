@@ -69,7 +69,7 @@ export const DataSheetGrid = React.memo(
         height: maxHeight = 400,
         onChange = DEFAULT_EMPTY_CALLBACK,
         columns: rawColumns = DEFAULT_COLUMNS,
-        rowHeight = 40,
+        rowHeight = 20,
         headerRowHeight = typeof rowHeight === 'number' ? rowHeight : 40,
         gutterColumn,
         stickyRightColumn,
