@@ -1,6 +1,6 @@
 {
   "name": "@wasback/react-datasheet-grid",
-  "version": "4.12.4",
+  "version": "4.13.0",
   "description": "An Excel-like React component to create beautiful spreadsheets.",
   "publishConfig": {
     "access": "public"
