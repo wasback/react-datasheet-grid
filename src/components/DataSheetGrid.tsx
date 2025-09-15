@@ -90,7 +90,8 @@ export const DataSheetGrid = React.memo(
         rowClassName,
         cellClassName,
         onScroll,
-      }: DataSheetGridProps<T>,
+        onOpenLineInEditor,
+      }: DataSheetGridProps<T> & { onOpenLineInEditor?: (lineNumber: number, columnValue: any, columnKey: string) => void },
       ref: React.ForwardedRef<DataSheetGridRef>
     ): React.ReactElement => {
       const lastEditingCellRef = useRef<Cell | null>(null)
@@ -138,13 +139,58 @@ export const DataSheetGrid = React.memo(
       const [contextMenu, setContextMenu] = useState<{
         x: number
         y: number
-        cursorIndex: Cell
+        cursorIndex: Cell | null
+        rowIndex?: number
       } | null>(null)
 
       // Items of the context menu
-      const [contextMenuItems, setContextMenuItems] = useState<
-        ContextMenuItem[]
-      >([])
+      const [contextMenuItems, setContextMenuItems] = useState<ContextMenuItem[]>([])
+
+      // Listen for custom row context menu event
+      useEffect(() => {
+        const handler = (e: any) => {
+          const mouseEvent = e.detail.event as MouseEvent
+          mouseEvent.preventDefault()
+          // Find row index from mouse position
+          const innerRect = innerRef.current?.getBoundingClientRect()
+          if (!innerRect) return
+          const y = mouseEvent.clientY - innerRect.top
+          // Estimate row index
+          let rowHeightNum = typeof rowHeight === 'number' ? rowHeight : 20
+          let rowIndex = Math.floor((y - headerRowHeight) / rowHeightNum)
+          if (rowIndex < 0 || rowIndex >= data.length) return
+          setContextMenu({
+            x: mouseEvent.clientX,
+            y: mouseEvent.clientY,
+            cursorIndex: null,
+            rowIndex,
+          })
+          setContextMenuItems([
+            {
+              type: 'OPEN_LINE_EDITOR',
+              label: 'Open line in Editor',
+              rowIndex,
+              action: () => {
+                if (!onOpenLineInEditor) return
+                const rowData = data[rowIndex]
+                let columnKey = ''
+                let columnValue: any = undefined
+                if (rowData && typeof rowData === 'object') {
+                  const keys = Object.keys(rowData)
+                  if (keys.length > 0) {
+                    columnKey = keys[0]
+                    columnValue = (rowData as Record<string, any>)[columnKey]
+                  }
+                }
+                onOpenLineInEditor(rowIndex + 1, columnValue, columnKey)
+              },
+            },
+            // ...add other row actions here if needed
+          ])
+        }
+        window.addEventListener('dsg-row-contextmenu', handler)
+        return () => window.removeEventListener('dsg-row-contextmenu', handler)
+      }, [data.length, headerRowHeight, rowHeight])
 
       // True when the active cell is being edited
       const [editing, setEditing] = useState(false)

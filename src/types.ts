@@ -93,8 +93,10 @@ export type AddRowsComponentProps = {
 
 export type ContextMenuItem =
   | {
-      type: 'INSERT_ROW_BELLOW' | 'DELETE_ROW' | 'DUPLICATE_ROW' | 'COPY' | 'CUT' | 'PASTE' | 'COPY_WITH_HEADERS'
+      type: 'INSERT_ROW_BELLOW' | 'DELETE_ROW' | 'DUPLICATE_ROW' | 'COPY' | 'CUT' | 'PASTE' | 'COPY_WITH_HEADERS' | 'OPEN_LINE_EDITOR'
       action: () => void
+      label?: string
+      rowIndex?: number
     }
   | {
       type: 'DELETE_ROWS' | 'DUPLICATE_ROWS'
@@ -107,7 +109,7 @@ export type ContextMenuComponentProps = {
   clientX: number
   clientY: number
   items: ContextMenuItem[]
-  cursorIndex: Cell
+  cursorIndex: Cell | null
   close: () => void
 }
 
@@ -157,6 +159,7 @@ export type DataSheetGridProps<T> = {
   onActiveCellChange?: (opts: { cell: CellWithId | null }) => void
   onSelectionChange?: (opts: { selection: SelectionWithId | null }) => void
   onScroll?: React.UIEventHandler<HTMLDivElement> | undefined
+  onOpenLineInEditor?: (lineNumber: number, columnValue: any, columnKey: string) => void
 }
 
 type CellWithIdInput = {

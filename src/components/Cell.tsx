@@ -20,6 +20,21 @@ export const Cell: FC<{
   width,
   left,
 }) => {
+  // Handler for right-click on gutter (row tag)
+  const handleContextMenu = gutter
+    ? (e: React.MouseEvent<HTMLDivElement>) => {
+        if (gutter) {
+          // Custom event for row tag context menu
+          if (typeof window !== 'undefined') {
+            const customEvent = new CustomEvent('dsg-row-contextmenu', {
+              detail: { event: e },
+            })
+            window.dispatchEvent(customEvent)
+          }
+        }
+      }
+    : undefined
+
   return (
     <div
       className={cx(
@@ -34,6 +49,7 @@ export const Cell: FC<{
         width,
         left: stickyRight ? undefined : left,
       }}
+      onContextMenu={handleContextMenu}
     >
       {children}
     </div>

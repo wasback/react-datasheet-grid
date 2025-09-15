@@ -37,6 +37,16 @@ function App() {
     },
   ]
 
+  // Handler for Open line in Editor
+  const handleOpenLineInEditor = (
+    lineNumber: number,
+    columnValue: any,
+    columnKey: string
+  ) => {
+    // For this example, log the line number and firstName value
+    console.log(`Line: ${lineNumber}, ${columnKey}: ${columnValue}`)
+  }
+
   return (
     <div
       style={{
@@ -46,7 +56,12 @@ function App() {
         background: '#f3f3f3',
       }}
     >
-      <DataSheetGrid value={data} onChange={setData} columns={columns} />
+      <DataSheetGrid
+        value={data}
+        onChange={setData}
+        columns={columns}
+        onOpenLineInEditor={handleOpenLineInEditor}
+      />
     </div>
   )
 }

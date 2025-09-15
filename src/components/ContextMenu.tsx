@@ -4,6 +4,9 @@ import { useDocumentEventListener } from '../hooks/useDocumentEventListener'
 import { ContextMenuItem, ContextMenuComponentProps } from '../types'
 
 export const defaultRenderItem = (item: ContextMenuItem) => {
+  if (item.type === 'OPEN_LINE_EDITOR') {
+    return <>{item.label || 'Open line in Editor'}</>
+  }
   if (item.type === 'CUT') {
     return <>Cut</>
   }
