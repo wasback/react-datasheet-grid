@@ -1,11 +1,11 @@
-# @sdziadkowiec/react-datasheet-grid
+# @wasback/react-datasheet-grid
 
 This is a fork of [react-datasheet-grid](https://github.com/nick-keller/react-datasheet-grid) with added support for React 19
 
 ## Install
 
 ```bash
-npm install @sdziadkowiec/react-datasheet-grid
+npm install @wasback/react-datasheet-grid
 ```
 
 ## Usage
@@ -16,7 +16,7 @@ import {
   checkboxColumn,
   textColumn,
   keyColumn,
-} from '@sdziadkowiec/react-datasheet-grid'
+} from '@wasback/react-datasheet-grid'
 
 // Import the style only once in your app!
 import 'react-datasheet-grid/dist/style.css'
