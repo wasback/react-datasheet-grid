@@ -1,45 +1,53 @@
-import React, { FC, useState } from 'react'
-import { AddRowsComponentProps } from '../types'
 
-export const createAddRowsComponent =
-  (
-    translationKeys: { button?: string; unit?: string } = {}
-  ): FC<AddRowsComponentProps> =>
-  // eslint-disable-next-line react/display-name
-  ({ addRows }) => {
-    const [value, setValue] = useState<number>(1)
-    const [rawValue, setRawValue] = useState<string>(String(value))
+import React, { useState } from 'react'
+import type { FC } from 'react'
+import type { AddRowsComponentProps } from '../types'
 
-    return (
-      <div className="dsg-add-row">
-        <button
-          type="button"
-          className="dsg-add-row-btn"
-          onClick={() => addRows(value)}
-        >
-          {translationKeys.button ?? 'Add'}
-        </button>{' '}
-        <input
-          className="dsg-add-row-input"
-          value={rawValue}
-          onBlur={() => setRawValue(String(value))}
-          type="number"
-          min={1}
-          onChange={(e) => {
-            setRawValue(e.target.value)
-            setValue(Math.max(1, Math.round(parseInt(e.target.value) || 0)))
-          }}
-          onKeyDown={(event) => {
-            if (event.key === 'Enter') {
-              addRows(value)
-            }
-          }}
-        />{' '}
-        {translationKeys.unit ?? 'rows'}
-      </div>
-    )
+type AddRowsProps = Partial<{
+  translationKeys: Partial<{ button: string; unit: string }>
+  onAddClick: (count: number) => void
+}> & AddRowsComponentProps
+
+export const AddRows: FC<AddRowsProps> = ({ addRows, onAddClick, translationKeys = {} }) => {
+  const [value, setValue] = useState<number>(1)
+  const [rawValue, setRawValue] = useState<string>(String(value))
+
+  const handleClick = () => {
+    if (onAddClick) {
+      onAddClick(value)
+    } else if (addRows) {
+      addRows(value)
+    }
   }
 
-export const AddRows = createAddRowsComponent()
+  const handleEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleClick()
+    }
+  }
 
-AddRows.displayName = 'AddRows'
+  return (
+    <div className="dsg-add-row">
+      <button
+        type="button"
+        className="dsg-add-row-btn"
+        onClick={handleClick}
+      >
+        {translationKeys.button ?? 'Add'}
+      </button>{' '}
+      <input
+        className="dsg-add-row-input"
+        value={rawValue}
+        onBlur={() => setRawValue(String(value))}
+        type="number"
+        min={1}
+        onChange={(e) => {
+          setRawValue(e.target.value)
+          setValue(Math.max(1, Math.round(parseInt(e.target.value) || 0)))
+        }}
+        onKeyDown={handleEnter}
+      />{' '}
+      {translationKeys.unit ?? 'rows'}
+    </div>
+  )
+}
