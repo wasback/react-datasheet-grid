@@ -142,7 +142,7 @@ export type DataSheetGridProps<T> = {
   rowHeight?: number | ((opt: { rowData: T; rowIndex: number }) => number)
   headerRowHeight?: number
   addRowsComponent?:
-    | ((props: AddRowsComponentProps) => React.ReactElement | null)
+    | ((props: AddRowsComponentProps & { onAddClick?: (count: number) => void }) => React.ReactElement | null)
     | false
   createRow?: () => T
   duplicateRow?: (opts: { rowData: T; rowIndex: number }) => T
@@ -160,6 +160,7 @@ export type DataSheetGridProps<T> = {
   onSelectionChange?: (opts: { selection: SelectionWithId | null }) => void
   onScroll?: React.UIEventHandler<HTMLDivElement> | undefined
   onOpenLineInEditor?: (lineNumber: number, columnValue: any, columnKey: string) => void
+  onAddRows?: (count: number) => void
 }
 
 type CellWithIdInput = {

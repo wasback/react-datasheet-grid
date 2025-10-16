@@ -74,7 +74,7 @@ export const DataSheetGrid = React.memo(
         gutterColumn,
         stickyRightColumn,
         rowKey,
-        addRowsComponent: AddRowsComponent = AddRows as (props: AddRowsComponentProps) => React.ReactElement | null,
+  addRowsComponent: AddRowsComponent = AddRows as (props: AddRowsComponentProps & { onAddClick?: (count: number) => void }) => React.ReactElement | null,
         createRow = DEFAULT_CREATE_ROW as () => T,
         autoAddRow = false,
         lockRows = false,
@@ -90,7 +90,8 @@ export const DataSheetGrid = React.memo(
         rowClassName,
         cellClassName,
         onScroll,
-        onOpenLineInEditor,
+  onOpenLineInEditor,
+  onAddRows,
       }: DataSheetGridProps<T> & { onOpenLineInEditor?: (lineNumber: number, columnValue: any, columnKey: string) => void },
       ref: React.ForwardedRef<DataSheetGridRef>
     ): React.ReactElement => {
@@ -1989,6 +1990,7 @@ export const DataSheetGrid = React.memo(
         {!lockRows && AddRowsComponent && (
           <AddRowsComponent
             addRows={(count) => insertRowAfter(data.length - 1, count)}
+            onAddClick={onAddRows}
           />
         )}
         {contextMenu && contextMenuItems.length > 0 && (
