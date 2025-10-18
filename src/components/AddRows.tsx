@@ -6,9 +6,10 @@ import type { AddRowsComponentProps } from '../types'
 type AddRowsProps = Partial<{
   translationKeys: Partial<{ button: string; unit: string }>
   onAddClick: (count: number) => void
+  showRowCountInput: boolean
 }> & AddRowsComponentProps
 
-export const AddRows: FC<AddRowsProps> = ({ addRows, onAddClick, translationKeys = {} }) => {
+export const AddRows: FC<AddRowsProps> = ({ addRows, onAddClick, translationKeys = {}, showRowCountInput = true }) => {
   const [value, setValue] = useState<number>(1)
   const [rawValue, setRawValue] = useState<string>(String(value))
 
@@ -34,20 +35,25 @@ export const AddRows: FC<AddRowsProps> = ({ addRows, onAddClick, translationKeys
         onClick={handleClick}
       >
         {translationKeys.button ?? 'Add'}
-      </button>{' '}
-      <input
-        className="dsg-add-row-input"
-        value={rawValue}
-        onBlur={() => setRawValue(String(value))}
-        type="number"
-        min={1}
-        onChange={(e) => {
-          setRawValue(e.target.value)
-          setValue(Math.max(1, Math.round(parseInt(e.target.value) || 0)))
-        }}
-        onKeyDown={handleEnter}
-      />{' '}
-      {translationKeys.unit ?? 'rows'}
+      </button>
+      {showRowCountInput && (
+        <>
+          {' '}
+          <input
+            className="dsg-add-row-input"
+            value={rawValue}
+            onBlur={() => setRawValue(String(value))}
+            type="number"
+            min={1}
+            onChange={(e) => {
+              setRawValue(e.target.value)
+              setValue(Math.max(1, Math.round(parseInt(e.target.value) || 0)))
+            }}
+            onKeyDown={handleEnter}
+          />{' '}
+          {translationKeys.unit ?? 'rows'}
+        </>
+      )}
     </div>
   )
 }

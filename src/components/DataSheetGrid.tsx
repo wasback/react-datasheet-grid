@@ -92,6 +92,9 @@ export const DataSheetGrid = React.memo(
         onScroll,
   onOpenLineInEditor,
   onAddRows,
+  addRowsButtonVisible = true,
+  addRowsButtonText,
+  showRowCountInput = true,
       }: DataSheetGridProps<T> & { onOpenLineInEditor?: (lineNumber: number, columnValue: any, columnKey: string) => void },
       ref: React.ForwardedRef<DataSheetGridRef>
     ): React.ReactElement => {
@@ -1987,10 +1990,12 @@ export const DataSheetGrid = React.memo(
             })
           }}
         />
-        {!lockRows && AddRowsComponent && (
+        {!lockRows && addRowsButtonVisible && AddRowsComponent && (
           <AddRowsComponent
             addRows={(count) => insertRowAfter(data.length - 1, count)}
             onAddClick={onAddRows}
+            translationKeys={addRowsButtonText ? { button: addRowsButtonText } : undefined}
+            showRowCountInput={showRowCountInput}
           />
         )}
         {contextMenu && contextMenuItems.length > 0 && (
